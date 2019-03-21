@@ -10,7 +10,7 @@
 
 Вы можете клонировать репозиторий, чтобы собрать билд под Mac, Windows или Linux.
 
-##Подготовка
+## Подготовка
 
 Чтобы слить содержимое репозитория себе:
 ```sh
@@ -20,10 +20,12 @@ git clone git://github.com/neverm1ndo/paralogs.git
 ```sh
 npm install
 ```
-##Сборка
+## Сборка
 
 | OS | Команда |
 | --- | --- |
 | Windows | `npm run electron:windows` |
 | Linux | `npm run electron:linux` |
 | MAC | `npm run electron:mac` |
+
+Спасибо [maximegris](https://github.com/maximegris/angular-electron/), за готовый семпл проекта angular-electron.
