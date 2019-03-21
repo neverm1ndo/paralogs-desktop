@@ -1,0 +1,37 @@
+<div class="col-12 mt-3 mb-2 overflow-hidden hdtable">
+  <h3>Поиск по {{mode | uppercase}}</h3>
+  <p>
+    Все ники с запрошенным {{mode | uppercase}} в открытом логе
+    <br>
+    <kbd>{{hdseries}}</kbd>
+  </p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Ник</th>
+        <th scope="col">Инфо</th>
+      </tr>
+    </thead>
+      <tbody *ngFor="let hdresult of (loglist | hd:hdseries); let i = index">
+        <tr *ngIf="i==0 && (hdresult.process!=='<connection/reject/badname/regex>' && hdresult.process!=='<connection/reject/badname/length>')">
+          <th scope="row">{{i+1}}</th>
+          <td>
+            {{hdresult.player.nickname}}<br>
+            <a routerLink="/{{hdresult.player.nickname}}" class=" btn btn-outline-dark mt-2" name="button"><span>Перейти</span></a>
+          </td>
+          <td class="pb-0">
+            <app-geoseries [geoseries]="log.parseGeoSeries(hdresult.player.motion)"></app-geoseries>
+          </td>
+          </tr>
+          <tr *ngIf="hdresult.player.nickname!==(loglist | hd:hdseries)[i?i-1:0].player.nickname && (hdresult.process!=='<connection/reject/badname/regex>' && hdresult.process!=='<connection/reject/badname/length>')">
+            <th scope="row">{{i+1}}</th>
+            <td>{{hdresult.player.nickname}}<br>
+            <a routerLink="/{{hdresult.player.nickname}}" class="btn btn-outline-dark mt-2" name="button"><span>Перейти</span></a></td>
+            <td class="pb-0">
+              <app-geoseries [geoseries]="log.parseGeoSeries(hdresult.player.motion)"></app-geoseries>
+            </td>
+          </tr>
+      </tbody>
+  </table>
+</div>

@@ -1,0 +1,158 @@
+<div class="col-3 h-100 options d-flex d-flex align-content-between flex-wrap">
+    <div class="col-12 mt-3">
+      <form [formGroup]="filterForm" (ngSubmit)="setFilter()">
+        <h4 class="mb-3">Фильтр</h4>
+        <div class="form-group row">
+          <div class="col-sm-10">
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input"
+              type="checkbox"
+              id="gridCheck1"
+              formControlName="weapBuy">
+              <label class="custom-control-label" for="gridCheck1">
+                <span>Скрыть покупку оружия</span>
+              </label>
+            </div>
+          </div>
+          <div class="col-sm-10">
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input"
+              type="checkbox"
+              id="gridCheck2"
+              formControlName="killDeath"
+              >
+              <label class="custom-control-label" for="gridCheck2">
+                <span>Скрыть убийства/смерти</span>
+              </label>
+            </div>
+          </div>
+          <div class="col-sm-10">
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input"
+              type="checkbox"
+              id="gridCheck3"
+              formControlName="spawn">
+              <label class="custom-control-label" for="gridCheck3">
+                <span>Скрыть спавн</span>
+              </label>
+            </div>
+          </div>
+          <div class="col-sm-10">
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input"
+              type="checkbox"
+              id="gridCheck4"
+              formControlName="connection">
+              <label class="custom-control-label" for="gridCheck4">
+                <span>Скрыть коннект/дисконнект</span>
+              </label>
+            </div>
+          </div>
+          <div class="col-sm-10">
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input"
+              type="checkbox"
+              id="gridCheck5"
+              formControlName="colChange">
+              <label class="custom-control-label" for="gridCheck5">
+                <span>Скрыть смену цвета</span>
+              </label>
+            </div>
+          </div>
+          <div class="col-sm-10">
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input"
+              type="checkbox"
+              id="hideprep"
+              formControlName="preprocs">
+              <label class="custom-control-label" for="hideprep">
+                <span>Скрыть препроцессы</span>
+              </label>
+            </div>
+          </div>
+          <div class="col-sm-10">
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input"
+              type="checkbox"
+              id="idWithNick"
+              formControlName="idnick">
+              <label class="custom-control-label" for="idWithNick">
+                <span>Отображать id рядом с ником</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="form-group row">
+          <label for="inputEmail3" class="col-sm-2 col-form-label">От</label>
+          <div class="col-sm-10">
+            <input type="text"
+            class="form-control disabled"
+            id="inputEmail3"
+            placeholder="Дата"
+            formControlName="dateFrom">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="inputPassword3" class="col-sm-2 col-form-label">До</label>
+          <div class="col-sm-10">
+            <input type="text"
+            class="form-control disabled"
+            id="inputPassword3"
+            placeholder="Время"
+            formControlName="dateTo">
+          </div>
+        </div> -->
+        <fieldset class="form-group">
+          <div class="row">
+            <legend class="col-form-label col-sm-2 pt-0">Вид</legend>
+            <div class="col-sm-10">
+              <div class="custom-control custom-radio">
+                <input class="custom-control-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+                <label class="custom-control-label" for="gridRadios1">
+                  <span>Полный</span>
+                </label>
+              </div>
+              <div class="custom-control custom-radio disabled">
+                <input class="custom-control-input" type="radio" name="gridRadios" id="gridRadios3" value="option3" disabled>
+                <label class="custom-control-label" for="gridRadios3">
+                  <span>Упрощенный</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        <div class="form-group row">
+          <div class="col-sm-10">
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input"
+              type="checkbox"
+              id="gridCheck6"
+              formControlName="litGr">
+              <label class="custom-control-label" for="gridCheck6">
+                <span>Подсвечивать командный чат</span>
+              </label>
+            </div>
+          </div>
+          <div class="col-sm-10">
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input"
+              type="checkbox"
+              id="gridCheck7"
+              formControlName="litPm">
+              <label class="custom-control-label" for="gridCheck7">
+                <span>Подсвечивать ЛС</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-12">
+            <button type="submit" class="btn btn-outline-dark w-100">Применить</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  <div class="col-12 text-center mt-5 mb-3">
+    <small class="disabled text-center">Shimmer, 2019</small>
+  </div>
+</div>

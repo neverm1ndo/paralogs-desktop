@@ -1,0 +1,93 @@
+<div class="col-12 logswitch" *ngIf="mod=='player'">
+  <div class="row mt-2">
+    <div class="card text-white bg-dark mb-3 col-12">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-3">
+            <div class="row">
+              <p>
+                <span>Добавлено <span [ngClass]="{'text-warning' : player.split('&').length> 3}">{{player.split('&').length}}</span> из 3</span>
+              </p>
+            </div>
+            <div class="row">
+                <h5 class="w-100" *ngFor="let nick of player.split('&'); let i = index" [ngClass]="{'shrinked' : player.split('&').length>= 3}">{{nick}} <span class="text-warning" *ngIf="i>2">не будет отображено</span></h5>
+            </div>
+          </div>
+            <div class="col-9 pr-0">
+              <button type="button" routerLink="/full:" class="btn btn-outline-light logswitch float-right">Показать полный лог</button>
+              <button type="button" routerLink="/acheat:" class="btn mr-2 btn-outline-light logswitch float-right">Лог срабатываний античита</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-2">
+      <h6>Дата</h6>
+    </div>
+    <div class="col-2">
+      <h6>Процесс</h6>
+    </div>
+    <div class="col-2 text-center">
+      <h6>Ник</h6>
+    </div>
+    <div class="col-6 text-center">
+      <h6>Действие</h6>
+    </div>
+  </div>
+</div>
+<div class="col-12 mt-2 mb-2 overflow-hidden" *ngIf="loglist && mod=='player'">
+  <!--
+  Снизу костыль, кто осмелится исправить, тот молодец FIXME: [previous]="loglist[i?i-1:0]
+  UPD: я сделал еще хуже, это работает еще дольше, но работает... Вы только гляньте на этого монстра FIXME: [previous]="(loglist| sort:player)[i?i-1:0]
+  // UPD FIXME: использовать пайп для сортировки и фильтраии очень ресурсоемко и занимает больше секунды времени, нужна альтернатива
+-->
+
+  <app-logline *ngFor="let line of (loglist | sort:player) ; let i = index" [line]="line"></app-logline>
+  <h4 *ngIf="((loglist | sort:player).length==0 && mod=='player') || ((loglist | hd:hdseries).length==0 && mod=='hd') || ((loglist | hd:hdseries).length==0 && mod=='sm')" class="font-weight-light text-center mt-2" role="alert">
+    Совпадений не найдено
+  </h4>
+</div>
+<div class="col-12 mt-3 mb-2 overflow-hidden" *ngIf="loglist && mod=='acheat'">
+  <h3>Лог процесса {{preproc}}</h3>
+  <p>
+    <br>
+    <kbd>Срабатывания {{preproc}}</kbd>
+  </p>
+  <app-logline *ngFor="let line of (loglist | preproc:preproc) ; let i = index" [line]="line"></app-logline>
+    <h4 *ngIf="((loglist | preproc:preproc).length==0)" class="font-weight-light text-center mt-2" role="alert">
+      Лог {{preproc}} пуст
+    </h4>
+</div>
+<div class="col-12 d-flex flex-column h-100 pr-0" *ngIf="loglist && mod=='full'">
+    <nav class="mt-2">
+      <ul *ngIf="pager.pages && pager.pages.length" class="pagination pagination-sm">
+        <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+          <a class="page-link" (click)="setPage(1)">Начало</a>
+        </li>
+        <li class="page-item" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+          <a class="page-link" (click)="setPage(page)">{{page}}</a>
+        </li>
+        <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+          <a class="page-link" (click)="setPage(pager.totalPages)">Конец</a>
+        </li>
+      </ul>
+    </nav>
+    <!-- <span class="badge badge-dark float-right">Лог содержит {{loglist.length}} строк</span> -->
+    <div class="overflow-auto d-flex tabfull">
+      <table class="table fulllog table-sm">
+        <tbody>
+          <tr *ngFor="let line of pagedItems; let i = index; let l = count">
+            <th style="min-width:130px;" scope="row">{{line.date| date:'d MMM yy, HH:mm'}}</th>
+            <td style="max-width:180px;">{{line.process}}</td>
+            <td style="max-width:180px;" routerLink="/{{line.player.nickname}}"><u class="text-primary">{{line.player.nickname}}</u></td>
+            <td>{{line.player.motion}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+</div>
+<div *ngIf="!loglist" class="alert alert-danger mt-3" role="alert">
+  <span><strong>Лог не загружен:</strong> Проверьте статус загрузки лога</span>
+</div>
+<app-hdsearch *ngIf="loglist && (mod=='hd' || mod=='sm')" [list]="loglist" [hd]="hdseries" [mode]="mod"></app-hdsearch>

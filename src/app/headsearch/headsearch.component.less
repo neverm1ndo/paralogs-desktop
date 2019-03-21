@@ -1,0 +1,91 @@
+h1 {
+  position: relative;
+  top: -3px;
+  font-weight: 200;
+  font-size: 30px;
+}
+header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  // height: 50px;
+  background: #343a40;
+  color: #dfdfdf;
+  z-index: 10;
+  svg {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    top: -4px;
+    path {
+      fill: #fdfdfd;
+    }
+  }
+  span {
+    font-size: 12px;
+  }
+  .logbase {
+    font-size: 12px;
+  }
+  .head {
+    padding-top: 8px;
+  }
+  .head, input, button {
+      font-size: 12px;
+  }
+  .btn-file {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-file input[type=file] {
+      position: absolute;
+      top: 0;
+      right: 0;
+      min-width: 100%;
+      min-height: 100%;
+      font-size: 100px;
+      text-align: right;
+      filter: alpha(opacity=0);
+      opacity: 0;
+      outline: none;
+      cursor: inherit;
+      display: block;
+  }
+  .led {
+    position: relative;
+    top: 0px;
+    width: 7px;
+    height: 7px;
+    border-radius: 100%;
+    display: inline-block;
+    &-success {
+      background: #28a745;
+    }
+    &-warning {
+      background: #ffc107;
+    }
+  }
+}
+.full {
+  height: 100%!important;
+}
+.progress {
+  position: fixed;
+  top: 48px;
+  height: 3px;
+  width: 100%;
+  z-index: 10;
+  border-radius: 0;
+}
+.error {
+  background: #dc3545;
+  position: fixed;
+  top: 48px;
+  height: 21px;
+  width: 100%;
+  z-index: 10;
+  border-radius: 0;
+  text-align: center;
+  color: #fdfdfd;
+  font-size: 12px;
+}

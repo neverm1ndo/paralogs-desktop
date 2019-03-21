@@ -1,0 +1,25 @@
+.options {
+  padding-top: 60px;
+  background: #fafafa;
+  position: fixed;
+  height: 100%;
+  font-size: 11px;
+  bottom: 0px;
+  margin-bottom: 0px;
+  h4 {
+    margin-top: 25px;
+  }
+  label {
+    span {
+      position: relative;
+      top: 4px;
+    }
+  }
+  .custom-control-input:checked {
+    & ~ .custom-control-label::before {
+      color: #fff;
+      border-color: #404040;
+      background-color: #404040;
+    }
+  }
+}

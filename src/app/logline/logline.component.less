@@ -1,0 +1,54 @@
+span, table, th, td {
+  font-size: 12px;
+}
+.logline {
+  cursor: pointer;
+  &:hover {
+    background: #fdfdfd;
+  }
+}
+.little {
+  span {
+    font-size: 10px;
+  }
+}
+.colorset {
+  line-height: 20px;
+  .colory {
+    border: 1px solid #ededed;
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 100%;
+    position: relative;
+    top: 2px;
+  }
+}
+.d_reason {
+  display: inline-block;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.geoseries {
+  .row {
+    &:nth-child(odd) {
+      background: #ededed;
+    }
+  }
+}
+.banhammer {
+  font-size: 10px;
+  &_report {
+    app-geoseries {
+      .geoseries {
+        .row {
+          &:nth-child(odd) {
+            background: none!important;
+          }
+        }
+      }
+    }
+  }
+}
