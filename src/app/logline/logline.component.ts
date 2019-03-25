@@ -13,7 +13,6 @@ export class LoglineComponent implements OnInit {
 
 @Input('line') line : Line;
 @Input('hour') hour : number;
-// @Input('previous') previous : any; //для проверки предыдущего элемента
 inject : boolean = true;
 processes = Processes;
 
@@ -190,7 +189,6 @@ processes = Processes;
 
   checkOption() {
     let opt = JSON.parse(window.localStorage.getItem('filter'));
-    // console.log(opt);
     return !opt.weapBuy;
   }
 
@@ -214,7 +212,6 @@ processes = Processes;
     } else return motion;
   }
   parseBan(motion: any) {
-    console.log(motion);
     if (typeof motion == 'string') {
       let newmotion = motion.toString().split(/\s/, 5);
       let reason = motion.toString().match(/'(.*?)'/);

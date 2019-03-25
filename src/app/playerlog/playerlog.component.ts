@@ -84,6 +84,10 @@ export class PlayerlogComponent implements OnInit {
         case 'full':
           this.mod = 'full';
           break;
+        case 'adm':
+          this.preproc = 'auth';
+          this.mod = 'adm';
+          break;
       }
     } else {
       this.player = params['player'] || '';
@@ -105,6 +109,7 @@ export class PlayerlogComponent implements OnInit {
     filter(log => log!==null))
     .subscribe( log => {
       this.loglist = this.logToCollection(log);
+      this.log.loglist = this.loglist;
       this.setPage(1);
     });
   }

@@ -5,7 +5,7 @@
   <div class="col-2">
     <span>{{line.process}}</span>
   </div>
-  <div class="col-2 text-center" [ngClass]="{'little': line.player.nickname.length>=8}">
+  <div class="col-2 text-center" [ngClass]="{'lil': line.player.nickname.length>=8}">
     <span><strong>{{line.player.nickname}}</strong></span>
     <span *ngIf="(options.options | async)?.idnick"><strong> {{line.player.id}}</strong></span>
   </div>
@@ -16,7 +16,7 @@
       </ng-template>
       <!--PLAYER__INFO-->
       <span *ngIf="line.process===processes.player_info.on.id">
-        <span class="badge badge-info mr-1">ИНФО</span><strong>Цель:</strong> {{line.player.motion}}
+        <span class="badge badge-info mr-1 mt-1">ИНФО</span><strong>Цель:</strong> {{line.player.motion}}
       </span>
       <!--MUTE-->
       <div
@@ -87,7 +87,7 @@
       </div>
       <!--SPECTATE-->
       <span *ngIf="line.process===processes.spectate.start || line.process===processes.spectate.change || line.process===processes.spectate.stop || line.process===processes.spectate.spawn">
-        <span class="badge badge-info mr-1">СЛЕЖКА
+        <span class="badge badge-info mr-1 mt-1">СЛЕЖКА
           <span *ngIf="line.process===processes.spectate.stop">ОСТАНОВЛЕНА</span>
           <span *ngIf="line.process===processes.spectate.spawn">: СПАВН</span>
         </span>
@@ -98,9 +98,12 @@
       <span *ngIf="line.process===processes.free_for_all.spawn">
         <span class="text-success">ИГРОК ЗАСПАВНЕН</span> {{line.player.motion}}
       </span>
-      <span class="badge badge-info" *ngIf="line.process===processes.auth.ok">
-        {{line.player.motion}}
-      </span>
+      <div class="pb-1" *ngIf="line.process===processes.auth.ok">
+        <span class="badge badge-info mt-1">
+          АВТОРИЗАЦИЯ
+        </span><br>
+        <span><kbd>{{line.player.motion}} | {{line.player.motion.split(' ')[1] | adms}}</kbd></span>
+      </div>
       <span class="colorset" *ngIf="line.process===processes.player_color.init || line.process===processes.player_color.set">Смена цвета {{line.player.motion[1]}}<i class="colory" [ngStyle]="{'background': '#' + line.player.motion[2]}"></i>{{line.player.motion[3]}}</span>
       <span *ngIf="line.process===processes.chat.msg">
       {{line.player.motion}}</span>
@@ -119,7 +122,7 @@
       <strong>{{line.player.motion[1]}}:</strong>
         {{line.player.motion[3]}}
       </span>
-      <span *ngIf="line.process===processes.cmd.ok">
+      <div class="w-100" *ngIf="line.process===processes.cmd.ok">
       <ng-template #noadm>
         <span class="text-success">
           <strong>{{line.player.motion[1]}}:</strong>
@@ -127,32 +130,37 @@
         </span>
       </ng-template>
       <span *ngIf="line.player.motion[1]=='kick' || line.player.motion[1]=='mute' || line.player.motion[1]=='ban' || line.player.motion[1]=='reconfigure'; else noadm">
-        <span *ngIf="line.player.motion[1]=='kick'">
-          <span class="badge badge-info mr-1">КИК</span> {{line.player.motion[3]}}
+        <span class="w-100" *ngIf="line.player.motion[1]=='kick'">
+          <span class="badge badge-info mr-1 mt-1 mb-1">КИК</span> {{line.player.motion[3]}}
+          <app-special [date]="line.date" [move]="line.player.motion[1]"></app-special>
         </span>
         <span *ngIf="line.player.motion[1]=='reconfigure'">
-          <span class="badge badge-info mr-1">РЕКОНФИГУРАЦИЯ</span> {{line.player.motion[3]}}
+          <span class="badge badge-info mr-1 mt-1 mb-1">РЕКОНФИГУРАЦИЯ</span> {{line.player.motion[3]}}
+          <!-- <button type="button" class="btn btn-outline-info little pt-1 pb-1" name="button"><span>?</span></button> -->
         </span>
-        <span *ngIf="line.player.motion[1]=='mute'">
-          <span class="badge badge-info mr-1">МУТ</span> {{line.player.motion[3]}}
+        <span class="w-100" *ngIf="line.player.motion[1]=='mute'">
+          <span class="badge badge-info mr-1 mt-1 mb-1">МУТ</span> {{line.player.motion[3]}}
+          <!-- <button type="button" class="btn btn-outline-info little pt-1 pb-1" name="button"><span>?</span></button> -->
+          <app-special [date]="line.date" [move]="line.player.motion[1]"></app-special>
         </span>
         <span *ngIf="line.player.motion[1]=='ban'">
-          <span class="badge badge-info mr-1">БАН</span> {{line.player.motion[3]}}
+          <span class="badge badge-info mr-1 mt-1 mb-1">БАН</span> {{line.player.motion[3]}}
+          <!-- <button type="button" class="btn btn-outline-info  little pt-1 pb-1" name="button"><span>?</span></button> -->
+          <app-special [date]="line.date" [move]="line.player.motion[1]"></app-special>
         </span>
-        <!-- <strong>Цель:</strong> {{line.player.motion}} -->
       </span>
-      </span>
+      </div>
       <span
       *ngIf="line.process===processes.cmd.error.syntax"
       class="text-danger">
-        <span class="badge badge-danger mr-1">ОШИБКА СИНТАКСИСА</span>
+        <span class="badge badge-danger mr-1 mt-1">ОШИБКА СИНТАКСИСА</span>
         <strong>{{line.player.motion[1]}}:</strong>
         {{line.player.motion[3]}}
       </span>
       <span
       *ngIf="line.process===processes.cmd.error.process"
       class="text-danger">
-        <span class="badge badge-danger mr-1">ОШИБКА ПРОЦЕССИНГА</span>
+        <span class="badge badge-danger mr-1 mt-1">ОШИБКА ПРОЦЕССИНГА</span>
         <strong>{{line.player.motion[1]}}:</strong>
         {{line.player.motion[3]}}
       </span>
@@ -164,13 +172,13 @@
       <img class="d_reason" src="../assets/reasons/Weapon-{{line.player.motion | deathReasons}}.gif" /></span>
       <span *ngIf="line.process===processes.cmd.pre_error.antiflood">
       {{line.player.motion}}</span>
-      <span [ngClass]="{'badge-warning' : (options.options | async)?.litPm}" *ngIf="line.process===processes.chat.pm">
+      <span class="mt-1" [ngClass]="{'badge-warning' : (options.options | async)?.litPm}" *ngIf="line.process===processes.chat.pm">
       <strong>ЛС</strong> игроку {{line.player.motion[0]}}: {{line.player.motion[1]}}</span>
       <span [ngClass]="{'badge-primary' : (options.options | async)?.litGr}" *ngIf="line.process===processes.chat.group">
       <strong>КЧ {{line.player.motion[0]}}</strong>:
       {{line.player.motion[1]}}</span>
-      <span [ngClass]="{'badge-primary' : (options.options | async)?.litAdm}" *ngIf="line.process===processes.chat.admin_chat">
-      <strong>АЧ {{line.player.motion[0]}}</strong>:
+      <span class="mt-1" [ngClass]="{'badge-primary' : (options.options | async)?.litAdm}" *ngIf="line.process===processes.chat.admin_chat">
+      <span class="badge badge-info mr-1"><strong>АЧ {{line.player.motion[0]}}</strong></span>
       {{line.player.motion[1]}}</span>
       <span *ngIf="line.process===processes.chat.close">
       <strong>В ближний чат {{line.player.motion[0]}}</strong>:
@@ -201,10 +209,7 @@
             За фразу: <em><{{line.player.motion[3]}}</em>
           </span>
         </span>
-
       </div>
-      <!-- <span *ngIf="line.process===processes.cmd.ok">
-      {{line.player.motion}}</span> -->
       <app-geoseries *ngIf="line.player.geo && (line.process!==processes.connection.disconnect.ban &&  line.process!==processes.connection.disconnect.kick &&  line.process!==processes.connection.disconnect.rconkickban)" [geoseries]="line.player.geo"></app-geoseries>
     </div>
   </div>

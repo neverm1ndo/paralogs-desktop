@@ -16,6 +16,7 @@ export class LogService {
   status: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   fileInfo: File;
   progress: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  loglist: Array<any>;
 
   getLogFile(filename: string) {
   return this.http.get(filename, {responseType: 'text'})
@@ -72,5 +73,21 @@ export class LogService {
             series[key] = series[key].match(/[^\{\}':']+/g)[1];
           };
           return Object.values(series);
+  }
+  findActionById(date: number, move: string) {
+    let list = this.loglist;
+    if (move=='kick' || move=='ban') {
+    return list.filter( it => {
+        if (it!==undefined) {
+          return it.date.includes(+date.toString().slice(0, date.toString().length - 3)) && it.process.includes('<connection/disconnect/' + move +'>');
+        };
+      });
+    } else {
+        return list.filter( it => {
+        if (it!==undefined) {
+          return it.date.includes(+date.toString().slice(0, date.toString().length - 3)) && it.process.includes('<mute/on/hand>');
+        };
+      });
+    }
   }
 }

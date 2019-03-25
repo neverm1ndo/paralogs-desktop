@@ -3,7 +3,7 @@
     <div class="card text-white bg-dark mb-3 col-12">
       <div class="card-header">
         <div class="row">
-          <div class="col-3">
+          <!-- <div class="col-3">
             <div class="row">
               <p>
                 <span>Добавлено <span [ngClass]="{'text-warning' : player.split('&').length> 3}">{{player.split('&').length}}</span> из 3</span>
@@ -12,8 +12,9 @@
             <div class="row">
                 <h5 class="w-100" *ngFor="let nick of player.split('&'); let i = index" [ngClass]="{'shrinked' : player.split('&').length>= 3}">{{nick}} <span class="text-warning" *ngIf="i>2">не будет отображено</span></h5>
             </div>
-          </div>
-            <div class="col-9 pr-0">
+          </div> -->
+            <div class="col-12 pr-0">
+              <button type="button" routerLink="/adm:" class="btn ml-2 btn-outline-light logswitch float-right">Лог входов в админ панель</button>
               <button type="button" routerLink="/full:" class="btn btn-outline-light logswitch float-right">Показать полный лог</button>
               <button type="button" routerLink="/acheat:" class="btn mr-2 btn-outline-light logswitch float-right">Лог срабатываний античита</button>
             </div>
@@ -58,6 +59,32 @@
     <h4 *ngIf="((loglist | preproc:preproc).length==0)" class="font-weight-light text-center mt-2" role="alert">
       Лог {{preproc}} пуст
     </h4>
+</div>
+<div class="col-12 mt-3 mb-2 overflow-hidden" *ngIf="loglist && mod=='adm'">
+  <p>
+    Лог входов в админ панель
+  </p>
+  <table class="table fulllog">
+    <thead>
+      <tr>
+        <th scope="col">Дата</th>
+        <th scope="col">Ник</th>
+        <th scope="col">Статус</th>
+        <th scope="col">ID администратора</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let line of (loglist | preproc:preproc); let i = index; let l = count">
+      <tr *ngIf="line.process=='<auth/ok>' || line.process=='<auth/error/password>'">
+        <th style="min-width:130px;" scope="row">{{line.date| date:'d MMM yy, HH:mm'}}</th>
+        <td style="max-width:180px;" routerLink="/{{line.player.nickname}}"><u class="text-primary">{{line.player.nickname}}</u></td>
+        <td style="max-width:180px;">
+          <span *ngIf="line.process=='<auth/ok>'" class="text-success">Успешно залогинен</span>
+          <span *ngIf="line.process=='<auth/error/password>'" class="text-danger">Неудачная попытка входа</span>
+        </td>
+        <td><kbd>{{line.player.motion.split(' ')[1] | adms}}</kbd> {{line.player.motion}}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 <div class="col-12 d-flex flex-column h-100 pr-0" *ngIf="loglist && mod=='full'">
     <nav class="mt-2">

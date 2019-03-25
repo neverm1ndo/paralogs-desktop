@@ -23,6 +23,7 @@ export class AppComponent {
    // if (event.keyCode === KEY_CODE.F2) {
    //   this.location.forward();
    // }
+   // console.log(event.keyCode);
    if (event.altKey) {
      switch (event.keyCode) {
        case KEY_CODE.F:
@@ -31,6 +32,9 @@ export class AppComponent {
       case KEY_CODE.A:
        this.router.navigate(['/acheat:']);
        break;
+     case KEY_CODE.D:
+      this.router.navigate(['/adm:']);
+      break;
      }
    }
   }

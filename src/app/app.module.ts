@@ -20,6 +20,8 @@ import { HdPipe } from './hd.pipe';
 import { LobbyComponent } from './lobby/lobby.component';
 import { HdsearchComponent } from './hdsearch/hdsearch.component';
 import { PreprocPipe } from './preproc.pipe';
+import { AdmsPipe } from './adms.pipe';
+import { SpecialComponent } from './special/special.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import { PreprocPipe } from './preproc.pipe';
     HdPipe,
     LobbyComponent,
     HdsearchComponent,
-    PreprocPipe
+    PreprocPipe,
+    AdmsPipe,
+    SpecialComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,35 @@
+ <!-- <button type="button" (click)="switch = switch?true:false" class="btn btn-outline-info little pt-1 pb-1" name="button"><span>?</span></button> -->
+<div *ngIf="line" class="w-100">
+  <div
+  *ngIf="line.process==processes.connection.disconnect.ban || line.process==processes.connection.disconnect.kick || line.process==processes.connection.disconnect.rconkickban" class="alert w-100 banhammer_report p-2 mb-1"
+  [ngClass]="{'alert-danger': line.process==processes.connection.disconnect.ban, 'alert-warning': line.process==processes.connection.disconnect.kick || line.process==processes.connection.disconnect.rconkickban}"
+  role="alert">
+    <small class="mr-1">#ОТЧЕТ СИСТЕМЫ</small>
+    <strong *ngIf="line.process==processes.connection.disconnect.ban">БАН</strong>
+    <strong *ngIf="line.process==processes.connection.disconnect.kick">КИК</strong>
+      <strong *ngIf="line.process==processes.connection.disconnect.rconkickban">RCON КИКБАН</strong>
+    <br>
+    <span *ngIf="line.process!==processes.connection.disconnect.rconkickban; else rconkickban" class="mb-1">
+      <kbd>
+        <span *ngIf="line.process==processes.connection.disconnect.kick">Игрок {{line.player.nickname}} кикнут</span>
+        <span *ngIf="line.process==processes.connection.disconnect.ban">Игрок {{line.player.nickname}} забанен</span> по причине <strong>{{line.player.motion[2]}}</strong>
+      </kbd>
+      <br>
+      <span class="lil">{{line.player.motion[2] | banReasons}}</span>
+    </span>
+    <ng-template #rconkickban>
+      <span><kbd>RCON</kbd> Игрок кикнут или забанен</span>
+    </ng-template>
+  </div>
+  <div
+  class="alert alert-light mb-0 p-2"
+  role="alert"
+  *ngIf="line.process===processes.mute.on.hand">
+    <span>
+      <span class="text-info">РУЧНАЯ ЗАГЛУШКА</span><br>
+      <kbd class="mr-1">{{line.player.motion[1]}} минут</kbd>
+      <strong>Выдано игроку {{line.player.nickname}}</strong> по причине :<br>
+      <span class="lil">{{line.player.motion[4] | banReasons}}</span>
+    </span>
+  </div>
+</div>

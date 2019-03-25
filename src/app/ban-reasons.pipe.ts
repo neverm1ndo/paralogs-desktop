@@ -14,7 +14,8 @@ reasons: any = {
   r6: 'Реклама любых ресурсов (спам)',
   r7: 'Использование имен, включающих часть или полностью состоящих из нецензурного слова',
   r8: 'Ограничение свободы действий сверх правил сервера',
-  rass: 'Рассинхонизация с сервером, необходимо перезайти на сервер.'
+  rass: 'Рассинхонизация с сервером, необходимо перезайти на сервер.',
+  obh: 'Обход ручной или автоматической заглушки'
 }
 
   transform(reason: any): any {
@@ -38,6 +39,12 @@ reasons: any = {
     }
     if (reason.match('7')) {
       return this.reasons.r7;
+    }
+    if (reason.match('ник')) {
+      return this.reasons.r7;
+    }
+    if (reason.match('обход')) {
+      return this.reasons.obh;
     }
     if (reason.match('8')) {
       return this.reasons.r8;
