@@ -2,12 +2,12 @@
   <div class="col-2">
     <span><strong>{{line.date | date:'d MMM yy, HH:mm:ss'}}</strong></span>
   </div>
-  <div class="col-2">
-    <span>{{line.process}}</span>
+  <div class="col-2 overflow-hidden nowr">
+    <span class="nowr">{{line.process}}</span>
   </div>
-  <div class="col-2 text-center" [ngClass]="{'lil': line.player.nickname.length>=8}">
+  <div routerLink="/{{line.player.nickname}}" class="col-2 text-center" [ngClass]="{'lil': line.player.nickname.length>=8}">
     <span><strong>{{line.player.nickname}}</strong></span>
-    <span *ngIf="(options.options | async)?.idnick"><strong> {{line.player.id}}</strong></span>
+    <span *ngIf="!(ids | async)"><strong> {{line.player.id}}</strong></span>
   </div>
   <div class="col-6">
     <div class="row w-100">
@@ -16,7 +16,7 @@
       </ng-template>
       <!--PLAYER__INFO-->
       <span *ngIf="line.process===processes.player_info.on.id">
-        <span class="badge badge-info mr-1 mt-1">ИНФО</span><strong>Цель:</strong> {{line.player.motion}}
+        <span class="badge badge-info mr-1 mt-1"><fa name="info-circle" class="mr-2"></fa>ИНФО</span><strong>Цель:</strong> {{line.player.motion}}
       </span>
       <!--MUTE-->
       <div
@@ -32,12 +32,12 @@
       </div>
       <!--CHECK-->
       <span *ngIf="line.process===processes.check.explode.vehicle || line.process===processes.check.explode.player">
-        <span class="badge badge-info mr-1">ПРОВЕРКА ВЗРЫВОМ</span><strong>Вызвано:</strong> {{line.player.motion}}
+        <span class="badge badge-info mr-1"><fa name="bomb" class="mr-2"></fa>ПРОВЕРКА ВЗРЫВОМ</span><strong>Вызвано:</strong> {{line.player.motion}}
       </span>
       <div class="col-12 no-padding" *ngIf="line.process===processes.check.silent.vehicle || line.process===processes.check.silent.player">
         <div class="row">
           <div class="col-4 p-0">
-            <span class="badge badge-info mr-1">ТИХАЯ ПРОВЕРКА</span>
+            <span class="badge badge-info mr-1"><fa name="heartbeat" class="mr-2"></fa>ТИХАЯ ПРОВЕРКА</span>
           </div>
           <div class="col-6 p-0">
             <table class="table table-borderless mb-0 text-center table-striped">
@@ -87,7 +87,7 @@
       </div>
       <!--SPECTATE-->
       <span *ngIf="line.process===processes.spectate.start || line.process===processes.spectate.change || line.process===processes.spectate.stop || line.process===processes.spectate.spawn">
-        <span class="badge badge-info mr-1 mt-1">СЛЕЖКА
+        <span class="badge badge-info mr-1 mt-1"><fa name="binoculars" class="mr-2"></fa>СЛЕЖКА
           <span *ngIf="line.process===processes.spectate.stop">ОСТАНОВЛЕНА</span>
           <span *ngIf="line.process===processes.spectate.spawn">: СПАВН</span>
         </span>
@@ -96,13 +96,19 @@
       </span>
       <!--FREE-FOR-ALL-->
       <span *ngIf="line.process===processes.free_for_all.spawn">
-        <span class="text-success">ИГРОК ЗАСПАВНЕН</span> {{line.player.motion}}
+        <span class="text-success"><fa name="user-plus" class="mr-1"></fa>ИГРОК ЗАСПАВНЕН</span>
       </span>
       <div class="pb-1" *ngIf="line.process===processes.auth.ok">
         <span class="badge badge-info mt-1">
-          АВТОРИЗАЦИЯ
+          <fa name="sign-in" class="mr-2"></fa>АВТОРИЗАЦИЯ
         </span><br>
-        <span><kbd>{{line.player.motion}} | {{line.player.motion.split(' ')[1] | adms}}</kbd></span>
+        <span><kbd>{{line.player.motion}} | <fa name="user-secret"></fa> {{line.player.motion.split(' ')[1] | adms}}</kbd></span>
+      </div>
+      <div class="pb-1" *ngIf="line.process===processes.auth.first_spawn.deny">
+        <span class="badge badge-danger mr-2"><fa name="lock" class="mr-2"></fa>ЗАПРЕЩЕН ВХОД НА СЕРВЕР</span><span class="text-danger">Неудачная попытка входа на сервер</span>
+      </div>
+      <div class="pb-1" *ngIf="line.process===processes.auth.first_spawn.allow">
+        <span class="badge badge-success mr-2"><fa name="unlock" class="mr-2"></fa>ВХОД НА СЕРВЕР РАЗРЕШЕН</span><span class="text-success">Игроку разрешен доступ на сервер</span>
       </div>
       <span class="colorset" *ngIf="line.process===processes.player_color.init || line.process===processes.player_color.set">Смена цвета {{line.player.motion[1]}}<i class="colory" [ngStyle]="{'background': '#' + line.player.motion[2]}"></i>{{line.player.motion[3]}}</span>
       <span *ngIf="line.process===processes.chat.msg">
@@ -131,20 +137,20 @@
       </ng-template>
       <span *ngIf="line.player.motion[1]=='kick' || line.player.motion[1]=='mute' || line.player.motion[1]=='ban' || line.player.motion[1]=='reconfigure'; else noadm">
         <span class="w-100" *ngIf="line.player.motion[1]=='kick'">
-          <span class="badge badge-info mr-1 mt-1 mb-1">КИК</span> {{line.player.motion[3]}}
+          <span class="badge badge-info mr-1 mt-1 mb-1"><fa name="gavel" class="mr-2"></fa>КИК</span> {{line.player.motion[3]}}
           <app-special [date]="line.date" [move]="line.player.motion[1]"></app-special>
         </span>
         <span *ngIf="line.player.motion[1]=='reconfigure'">
-          <span class="badge badge-info mr-1 mt-1 mb-1">РЕКОНФИГУРАЦИЯ</span> {{line.player.motion[3]}}
+          <span class="badge badge-info mr-1 mt-1 mb-1"><fa name="retweet" class="mr-2"></fa>РЕКОНФИГУРАЦИЯ</span> {{line.player.motion[3]}}
           <!-- <button type="button" class="btn btn-outline-info little pt-1 pb-1" name="button"><span>?</span></button> -->
         </span>
         <span class="w-100" *ngIf="line.player.motion[1]=='mute'">
-          <span class="badge badge-info mr-1 mt-1 mb-1">МУТ</span> {{line.player.motion[3]}}
+          <span class="badge badge-info mr-1 mt-1 mb-1"><fa name="gavel" class="mr-2"></fa>МУТ</span> {{line.player.motion[3]}}
           <!-- <button type="button" class="btn btn-outline-info little pt-1 pb-1" name="button"><span>?</span></button> -->
           <app-special [date]="line.date" [move]="line.player.motion[1]"></app-special>
         </span>
         <span *ngIf="line.player.motion[1]=='ban'">
-          <span class="badge badge-info mr-1 mt-1 mb-1">БАН</span> {{line.player.motion[3]}}
+          <span class="badge badge-info mr-1 mt-1 mb-1"><fa name="gavel" class="mr-2"></fa>БАН</span> {{line.player.motion[3]}}
           <!-- <button type="button" class="btn btn-outline-info  little pt-1 pb-1" name="button"><span>?</span></button> -->
           <app-special [date]="line.date" [move]="line.player.motion[1]"></app-special>
         </span>
@@ -153,43 +159,55 @@
       <span
       *ngIf="line.process===processes.cmd.error.syntax"
       class="text-danger">
-        <span class="badge badge-danger mr-1 mt-1">ОШИБКА СИНТАКСИСА</span>
+        <span class="badge badge-danger mr-1 mt-1"><fa name="exclamation-triangle" class="mr-2"></fa>ОШИБКА СИНТАКСИСА</span>
         <strong>{{line.player.motion[1]}}:</strong>
         {{line.player.motion[3]}}
       </span>
       <span
       *ngIf="line.process===processes.cmd.error.process"
       class="text-danger">
-        <span class="badge badge-danger mr-1 mt-1">ОШИБКА ПРОЦЕССИНГА</span>
+        <span class="badge badge-danger mr-1 mt-1"><fa name="exclamation-triangle" class="mr-2"></fa>ОШИБКА ПРОЦЕССИНГА</span>
         <strong>{{line.player.motion[1]}}:</strong>
         {{line.player.motion[3]}}
       </span>
       <span *ngIf="line.process===processes.sleep.leave.exit || line.process===processes.sleep.leave.game">
-      <strong>AFK</strong> {{line.player.motion | sleep}}</span>
+      <strong><fa name="hourglass-end" class="mr-2"></fa>AFK</strong> {{line.player.motion | sleep}}</span>
       <span *ngIf="line.process==processes.health.killed || line.process==processes.health.suicided">
         <span *ngIf="line.process==processes.health.suicided">Совершил суицид: </span>
         {{line.player.motion}}
       <img class="d_reason" src="../assets/reasons/Weapon-{{line.player.motion | deathReasons}}.gif" /></span>
       <span *ngIf="line.process===processes.cmd.pre_error.antiflood">
       {{line.player.motion}}</span>
-      <span class="mt-1" [ngClass]="{'badge-warning' : (options.options | async)?.litPm}" *ngIf="line.process===processes.chat.pm">
+      <span class="mt-1" [ngClass]="{'badge-warning' : !(lit_pm | async)}" *ngIf="line.process===processes.chat.pm">
       <strong>ЛС</strong> игроку {{line.player.motion[0]}}: {{line.player.motion[1]}}</span>
-      <span [ngClass]="{'badge-primary' : (options.options | async)?.litGr}" *ngIf="line.process===processes.chat.group">
+      <span [ngClass]="{'badge-primary' : !(lit_gr | async)}" *ngIf="line.process===processes.chat.group">
       <strong>КЧ {{line.player.motion[0]}}</strong>:
       {{line.player.motion[1]}}</span>
-      <span class="mt-1" [ngClass]="{'badge-primary' : (options.options | async)?.litAdm}" *ngIf="line.process===processes.chat.admin_chat">
-      <span class="badge badge-info mr-1"><strong>АЧ {{line.player.motion[0]}}</strong></span>
+      <span class="mt-1" *ngIf="line.process===processes.chat.admin_chat">
+      <span class="badge badge-info mr-1"><strong><fa name="comment" class="mr-2"></fa>АЧ {{line.player.motion[0]}}</strong></span>
       {{line.player.motion[1]}}</span>
       <span *ngIf="line.process===processes.chat.close">
       <strong>В ближний чат {{line.player.motion[0]}}</strong>:
       {{line.player.motion[1]}}</span>
       <span *ngIf="line.process===processes.chat.report">
-      <strong> Отправил репорт на игрока {{line.player.motion[0]}}</strong>:
-      {{line.player.motion[1]}}</span>
+        <span class="badge badge-pill badge-secondary mr-2">
+          <fa name="fire" class="mr-2"></fa>
+          <strong> Отправил репорт на игрока {{line.player.motion[0]}}</strong>
+        </span>
+      <strong>{{line.player.motion[1]}}</strong></span>
+      <span class="alert-light p-2 w-100" *ngIf="line.process===processes.chat.block.broadcast.advertising">
+        <span class="badge badge-pill badge-secondary mr-2">
+          <fa name="eye-slash" class="mr-2"></fa>
+          <strong>БЛОК СООБЩЕНИЯ</strong>
+        </span>
+      <strong>{{line.player.motion[1]}}</strong>: <kbd>{{line.player.motion[3]}}</kbd>
+      <br><strong>Фраза: </strong><i>{{line.player.motion[5]}}</i>
+    </span>
       <div
       class="alert alert-warning mb-1 mt-1 w-100"
       *ngIf="line.process===processes.automute.dictionary.mute || line.process===processes.automute.meaningless.mute || line.process===processes.automute.dictionary.no_mute || line.process===processes.automute.meaningless.no_mute">
         <span>
+          <fa name="book" class="mr-2"></fa>
           <strong>ИГРОК
             <span *ngIf="line.process===processes.automute.dictionary.no_mute || line.process===processes.automute.dictionary.no_mute || line.process===processes.automute.meaningless.no_mute">НЕ БУДЕТ</span>
              ЗАГЛУШЕН
@@ -210,6 +228,9 @@
           </span>
         </span>
       </div>
+      <span class="badge badge-warning mb-1 mt-1" *ngIf="line.player.geo && line.process==processes.connection.disconnect.time_out"><fa name="plug" class="mr-2"></fa>ОБРЫВ СВЯЗИ</span>
+      <span class="badge badge-dark mb-1 mt-1" *ngIf="line.player.geo && line.process==processes.connection.connect"><fa name="link" class="mr-2"></fa>СОЕДИНЕНИЕ С СЕРВЕРОМ</span>
+      <span class="badge badge-dark mb-1 mt-1" *ngIf="line.player.geo && line.process==processes.connection.disconnect.quit"><fa name="unlink" class="mr-2"></fa>ВЫХОД С СЕРВЕРА</span>
       <app-geoseries *ngIf="line.player.geo && (line.process!==processes.connection.disconnect.ban &&  line.process!==processes.connection.disconnect.kick &&  line.process!==processes.connection.disconnect.rconkickban)" [geoseries]="line.player.geo"></app-geoseries>
     </div>
   </div>

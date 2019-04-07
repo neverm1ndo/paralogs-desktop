@@ -8,37 +8,148 @@ span, .hdtable {
   font-size: 14px;
   line-height: 13px;
 }
+.nofound {
+  position: relative;
+}
+.loader {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #fdfdfd;
+  top: 0px;
+  left: 0px;
+  &_logo {
+    width: 27px;
+    height: 27px;
+    position: absolute;
+    top: 16px;
+    left: -1px;
+    right: 0px;
+    margin: 0 auto;
+    path {
+      fill: #7f848a;
+    }
+  }
+  &_centrate {
+    position: absolute;
+    top: 50%;
+    margin-top: -15px;
+    left: 50%;
+    .spinner {
+        height: 60px;
+        width: 60px;
+        animation: rotate 2s linear infinite;
+        transform-origin: center center;
+        // position: fixed;
+        top: -10px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        .path {
+          stroke-dasharray: 1, 200;
+          stroke-dashoffset: 0;
+          animation: dash 1.5s ease-in-out infinite;
+          stroke-linecap: round;
+          stroke: #7f848a;
+        }
+      }
+      @keyframes rotate {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes dash {
+        0% {
+          stroke-dasharray: 1, 200;
+          stroke-dashoffset: 0;
+        }
+        50% {
+          stroke-dasharray: 89, 200;
+          stroke-dashoffset: -35px;
+        }
+        100% {
+          stroke-dasharray: 89, 200;
+          stroke-dashoffset: -124px;
+        }
+      }
+    .shadow {
+      width: 1px;
+      height: 1px;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      /* -webkit-box-shadow: 0px 0px 126px 34px rgba(0,0,0,0.86);
+      -moz-box-shadow: 0px 0px 126px 34px rgba(0,0,0,0.86);
+      box-shadow: 0px 0px 126px 34px rgba(0,0,0,0.86); */
+    }
+    @keyframes load {
+      0% { transform: scale(1); }
+      5% { transform: scale(1.2); }
+      40% { transform: scale(1); }
+      45% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+  }
+}
 .hdtable {
   table {
     margin-bottom: 0px;
   }
 }
-// .topper {
-//   position: fixed;
-//   top: 48px;
-//   height: 45px;
-//   background: #fff;
-//   border-bottom: 1px solid #dfdfdf;
-// }
-nav {
-  border-bottom: 1px solid #dfdfdf;
-  ul {
-    margin-bottom: 0.6em;
-    li {
-      cursor: pointer;
-      a {
-        font-size: 12px;
+.restructure {
+  margin-left: -15px;
+  padding-left: 15px;
+  margin-top: -2px;
+  background: #242a30 + #050505;
+  &2 {
+    color: #f8f9fa;
+    // height: 47px;
+    background: #242a30 + #050505;
+    margin-bottom: 0px;
+    margin-top: -2px;
+    fa {
+      float: left;
+      font-size: 23px;
+      position: relative;
+      top: 6px;
+    }
+    h6 {
+      font-weight: 400;
+      line-height: 47px;
+      margin-bottom: 0px;
+    }
+    table {
+      border: none;
+      tr th {
+        color: #f8f9fa;
       }
     }
   }
-  .active {
-    background: #303030!important;
-    color: #ffffff!important;
-  }
-  .page-link {
-    background-color: transparent;
-    background-image: none;
-    border-color: #6c757d;
+  nav {
+    // border-bottom: 1px solid #dfdfdf;
+    position: relative;
+    top: 1px;
+    ul {
+      margin-bottom: 0.6em;
+      li {
+        cursor: pointer;
+      }
+    }
+    .page-link {
+      border: 1px solid #f8f9fa;
+      font-size: 12px;
+      color: #f8f9fa;
+      background-color: transparent;
+      background-image: none;
+      // border-color: #6c757d;
+    }
+    .active {
+      a {
+        background: #f8f9fa!important;
+        color: #242a30!important;
+      }
+    }
   }
 }
 .tabfull {
@@ -47,6 +158,11 @@ nav {
 .fulllog {
   margin-top: -1px;
   thead, tbody {
+    app-logline {
+      .row {
+        width: 90%;
+      }
+    }
     tr {
       td, th {
         font-size: 12px!important;

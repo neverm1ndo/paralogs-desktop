@@ -30,8 +30,7 @@ export class HeadsearchComponent implements OnInit {
   }
 
   read(e: any) {
-    this.log.fileRead(e);
-    console.log(e);
+    this.log.fileReadMultiple(e);
   }
 
   ngOnInit() {

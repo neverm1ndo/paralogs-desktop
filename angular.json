@@ -22,11 +22,13 @@
               "src/favicon.png",
               "src/favicon.icns",
               "src/favicon.256x256.png",
-              "src/favicon.512x512.png"
+              "src/favicon.512x512.png",
+              "src/splash.html"
             ],
             "styles": [
               "src/styles.less",
-              "./node_modules/bootstrap/dist/css/bootstrap.css"
+              "./node_modules/bootstrap/dist/css/bootstrap.css",
+              "./node_modules/font-awesome/css/font-awesome.css"
             ],
             "scripts": []
           },

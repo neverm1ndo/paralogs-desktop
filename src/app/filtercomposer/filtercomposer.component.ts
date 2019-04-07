@@ -28,6 +28,7 @@ export class FiltercomposerComponent implements OnInit {
     public options: OptionsService
   ) { }
 
+
   setFilter() {
     let changedOpt = this.filterForm.getRawValue();
     window.localStorage.setItem('filter', JSON.stringify(changedOpt));

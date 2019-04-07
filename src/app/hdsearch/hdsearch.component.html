@@ -1,37 +1,37 @@
-<div class="col-12 mt-3 mb-2 overflow-hidden hdtable">
-  <h3>Поиск по {{mode | uppercase}}</h3>
+<div class="col-12 hdtable overflow-auto pt-3" [ngStyle]="{'height': (innerHeight - 50) + 'px'}">
+  <h6><fa name="id-card" class="mr-2"></fa>Поиск по {{mode | uppercase}}</h6>
   <p>
-    Все ники с запрошенным {{mode | uppercase}} в открытом логе
+    <small>Все ники с запрошенным {{mode | uppercase}} в открытом логе</small>
     <br>
-    <kbd>{{hdseries}}</kbd>
+    <small><kbd>{{hdseries}}</kbd></small>
   </p>
-  <table class="table">
+  <table class="table w-100">
     <thead>
       <tr>
-        <th scope="col">#</th>
         <th scope="col">Ник</th>
         <th scope="col">Инфо</th>
       </tr>
     </thead>
       <tbody *ngFor="let hdresult of (loglist | hd:hdseries); let i = index">
         <tr *ngIf="i==0 && (hdresult.process!=='<connection/reject/badname/regex>' && hdresult.process!=='<connection/reject/badname/length>')">
-          <th scope="row">{{i+1}}</th>
           <td>
             {{hdresult.player.nickname}}<br>
-            <a routerLink="/{{hdresult.player.nickname}}" class=" btn btn-outline-dark mt-2" name="button"><span>Перейти</span></a>
+            <a routerLink="/{{hdresult.player.nickname}}" class="text-secondary"><fa name="tags" class="mr-2"></fa><small>Перейти</small></a>
           </td>
           <td class="pb-0">
             <app-geoseries [geoseries]="log.parseGeoSeries(hdresult.player.motion)"></app-geoseries>
           </td>
           </tr>
           <tr *ngIf="hdresult.player.nickname!==(loglist | hd:hdseries)[i?i-1:0].player.nickname && (hdresult.process!=='<connection/reject/badname/regex>' && hdresult.process!=='<connection/reject/badname/length>')">
-            <th scope="row">{{i+1}}</th>
             <td>{{hdresult.player.nickname}}<br>
-            <a routerLink="/{{hdresult.player.nickname}}" class="btn btn-outline-dark mt-2" name="button"><span>Перейти</span></a></td>
+            <a routerLink="/{{hdresult.player.nickname}}" class="text-secondary"><fa name="tags" class="mr-2"></fa><small>Перейти</small></a></td>
             <td class="pb-0">
               <app-geoseries [geoseries]="log.parseGeoSeries(hdresult.player.motion)"></app-geoseries>
             </td>
           </tr>
       </tbody>
   </table>
+  <h6 *ngIf="(loglist | hd:hdseries).length==0" class="font-weight-light text-center mt-2 nofound text-secondary" [ngStyle]="{'top': ((innerHeight - 350)/2) + 'px'}" role="alert">
+    <fa name="user-secret" class="mr-2"></fa>Совпадений по {{mode | uppercase}} не найдено
+  </h6>
 </div>

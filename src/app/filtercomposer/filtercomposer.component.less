@@ -1,20 +1,113 @@
 .options {
+  width: 70px;
   padding-top: 60px;
-  background: #fafafa;
+  background: #343a40 - #101010;
   position: fixed;
   height: 100%;
   font-size: 11px;
   bottom: 0px;
   margin-bottom: 0px;
+  z-index: 2;
+  button {
+    font-size: 10px;
+  }
   h4 {
     margin-top: 25px;
   }
+  svg {
+    width: 25px;
+    height: 25px;
+    position: relative;
+    top: 0px;
+    transition: 0.1s linear;
+    path {
+      fill: #fdfdfd;
+    }
+  }
+  small {
+    transition: 0.1s linear;
+  }
+  input {
+    display: none;
+    &:checked ~ fa {
+      opacity: 0.3;
+    }
+    &:checked ~ svg {
+      opacity: 0.3;
+    }
+    &:checked ~ small {
+      opacity: 0.3;
+    }
+  }
   label {
+    user-select: none;
+    overflow: hidden;
+    color: #fafafa;
+    transition: 0.1s linear;
+    margin-bottom: 3px;
+    font-size: 22px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 5px;
+    // &::after {
+    //   content: attr(data-content)'';
+    //   overflow: hidden;
+    //   display: none;
+    //   width: 220px;
+    //   font-size: 11px;
+    //   line-height: 38px;
+    //   height: 40px;
+    //   background: #343a40;
+    //   opacity: 0;
+    //   position: absolute;
+    //   margin-left: 20px;
+    //   // transition: 0.05s linear;
+    //   border-radius: 2px;
+    //   // top: 0px;
+    //   // left: 0px;
+    // }
+    &:hover {
+      background: rgba(0,0,0,0.3);
+      path {
+        // fill: attr(data-color);
+        fill: '#'attr(data-color);
+      }
+      // &::after {
+      //   // width: 200px;
+      //   opacity: 1;
+      //   display: inline-block;
+      //   // pointer-events: none;
+      // }
+    }
     span {
       position: relative;
       top: 4px;
     }
+    .svg {
+      &-ico {
+        top: -4px;
+      }
+      &-text {
+        font-size: 9px;
+        position: relative;
+        top: -25px;
+        width: 100%;
+      }
+    }
   }
+  // @weap: #28a745 + #404040;
+  // #weap {
+  //   &:hover {
+  //     svg path {
+  //       fill: @weap;
+  //     }
+  //   }
+  //   &:checked {
+  //     opacity: 0.3;
+  //   }
+  // }
   .custom-control-input:checked {
     & ~ .custom-control-label::before {
       color: #fff;

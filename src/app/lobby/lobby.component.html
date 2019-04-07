@@ -1,4 +1,4 @@
-<div class="jumbotron pt-4 pb-2 mt-1 mb-1 d-flex h-100 overflow-auto align-content-between flex-wrap">
+<div class="jumbotron pt-4 pb-2 mt-1 mr-3 mb-1 d-flex overflow-auto align-content-between flex-wrap" [ngStyle]="{'height': (innerHeight - 61) + 'px'}">
   <div class="d-flex flex-column w-100">
     <h3 class="lead">Paralogs - программа для парсинга логов сервера Paradise</h3>
     <span>
@@ -30,18 +30,12 @@
                   </span>
                 </p>
                 <p>
-                  <span>Поиск по серийному номеру HD производится с добавлением префикса <kbd>hd:</kbd> в начале строки.
+                  <span>Поиск по серийному номеру HD или SM производится с добавлением  в начале строки префикса <kbd>hd:</kbd> или <kbd>sm:</kbd> соответственно.
                     <strong>Например: </strong> <kbd>hd:0a63fb96118526ae31c439365cd64010</kbd></span>
                   </p>
-                  <p>
-                    <span>Поиск по серийному номеру SM производится с добавлением префикса <kbd>sm:</kbd> в начале строки.
-                      <strong>Например: </strong> <kbd>sm:0a63fb96118526ae31c439365cd64010</kbd></span>
-                    </p>
                     <p>
-                      <span>Быстрое отображение лога античита производится с помощью префикса <kbd>acheat:</kbd> в начале строки или комбинацией клавиш <kbd>Alt + A</kbd>.
-                        <strong>Например: </strong> acheat:</span><br>
-                        <span>Данный префикс выведет все срабатывания античита в логе</span>
-                      </p>
+                      <span>Быстрое отображение лога античита производится с помощью префикса <kbd>acheat:</kbd> в начале строки или комбинацией клавиш <kbd>Alt + A</kbd>.</span>
+                    </p>
                       <p>
                         <span>Префикс <kbd>full:</kbd> или комбинация клавиш <kbd>Alt + F</kbd>. отобразит весь лог в упрощенном виде. Для удобства на одной странице отображается не более 1000 строк. Переключение между страницами производится с помощью навигации над выведенной таблицей или с помощью комбинации клавиш <kbd>Ctrl + &#8592;</kbd> и <kbd>Ctrl + &#8594;</kbd> на клавиатуре.</span><br>
                       </p>
@@ -56,7 +50,7 @@
           </div>
             <p>
               <span>Данное ПО распространяется по лицензии MIT. Copyright (c) 2019 Shimmer</span><br>
-              <span>Версия: paralogs 0.9.2
+              <span>Версия: paralogs 0.9.8
                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                 viewBox="0 0 64 64" style="enable-background:new 0 0 64 64;" xml:space="preserve">
                 <g>

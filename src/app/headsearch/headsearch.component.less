@@ -12,13 +12,18 @@ header {
   background: #343a40;
   color: #dfdfdf;
   z-index: 10;
-  svg {
-    width: 40px;
-    height: 40px;
-    position: relative;
-    top: -4px;
-    path {
-      fill: #fdfdfd;
+  .logotype {
+    left: 15px;
+    position: absolute;
+    z-index: 2;
+    svg {
+      width: 40px;
+      height: 40px;
+      position: relative;
+      top: -4px;
+      path {
+        fill: #fdfdfd;
+      }
     }
   }
   span {
@@ -29,6 +34,18 @@ header {
   }
   .head {
     padding-top: 8px;
+    padding-bottom: 8px;
+    max-height: 48px;
+    margin-left: 70px;
+  }
+  .input {
+    &-dark {
+      // background: #343a40 - #111111!important;
+      // border: 1px solid #343a40 - #020202!important;
+      background: #fcfcfc;
+      border: none;
+      // color: #dfdfdf;
+    }
   }
   .head, input, button {
       font-size: 12px;

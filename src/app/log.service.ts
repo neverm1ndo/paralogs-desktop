@@ -14,9 +14,10 @@ export class LogService {
   currentTarget: string;
   public file: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   status: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  fileInfo: File;
+  filesInfo: number;
   progress: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   loglist: Array<any>;
+  buffer: string;
 
   getLogFile(filename: string) {
   return this.http.get(filename, {responseType: 'text'})
@@ -27,11 +28,35 @@ export class LogService {
       )
     );
   }
+  fileReadMultiple(e: any) {
+    let files = [].slice.call(e.target.files);
+    let buffer: string = '';
+    // this.buffer = buffer;
+    for (let i = 0; i<files.length; i++) {
+      let reader = new FileReader();
+      reader.readAsText(files[i], 'cp1251');
+      reader.onload = () => {
+        buffer = buffer + reader.result;
+        this.file.next(buffer);
+        this.progress.next(0);
+        this.status.next(true);
+      }
+      reader.onprogress = (e) => {
+        this.status.next(false);
+        if (e.lengthComputable) {
+          this.progress.next(Math.floor((e.loaded / e.total) * 100));
+        }
+      }
+    }
+    this.filesInfo = files.length;
+  }
+
   fileRead(e: any) {
+    // let files = [].slice.call(e.target.files);
     let file = e.target.files[0];
     let reader = new FileReader();
     reader.readAsText(file, 'cp1251');
-    this.fileInfo = file;
+    // this.fileInfo = file;
     this.status.next(false);
     reader.onprogress = (e) => {
            if (e.lengthComputable) {

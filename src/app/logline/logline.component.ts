@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Processes, Line } from '../processes.mock';
 import { OptionsService } from '../options.service';
 import { LogService } from '../log.service';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-logline',
@@ -16,28 +16,44 @@ export class LoglineComponent implements OnInit {
 inject : boolean = true;
 processes = Processes;
 
+spawn: BehaviorSubject<boolean> = new BehaviorSubject(null);
+preprocs: BehaviorSubject<boolean> = new BehaviorSubject(null);
+col_change: BehaviorSubject<boolean> = new BehaviorSubject(null);
+weaps: BehaviorSubject<boolean> = new BehaviorSubject(null);
+deaths: BehaviorSubject<boolean> = new BehaviorSubject(null);
+ids: BehaviorSubject<boolean> = new BehaviorSubject(null);
+connects: BehaviorSubject<boolean> = new BehaviorSubject(null);
+lit_pm: BehaviorSubject<boolean> = new BehaviorSubject(null);
+lit_gr: BehaviorSubject<boolean> = new BehaviorSubject(null);
+
   constructor(
-    public options: OptionsService,
+    public opts: OptionsService,
     public log:LogService
-  ) { }
+  ) {
+    this.opts.options.subscribe(
+      (opts: any) => {
+        this.spawn.next(opts.spawn)
+        this.preprocs.next(opts.preprocs)
+        this.col_change.next(opts.colChange)
+        this.weaps.next(opts.weapBuy)
+        this.deaths.next(opts.killDeath)
+        this.ids.next(opts.idnick)
+        this.connects.next(opts.connection)
+        this.lit_pm.next(opts.litPm)
+        this.lit_gr.next(opts.litGr)
+      }
+    )
+  }
 //// FIXME: Нужен рефакторинг distributeProcesses(line: Line)
   distributeProcesses(line: Line) {
     switch (line.process) {
       case Processes.connection.connect:
         this.line.player.geo = this.log.parseGeoSeries(line.player.motion);
-        this.options.options.pipe(
-          map( opt => {
-            return opt.connection;
-          }))
-          .subscribe( o => this.inject =!o);
+        this.connects.subscribe(opt => this.inject = !opt);
         break;
       case Processes.connection.disconnect.quit:
         this.line.player.geo = this.log.parseGeoSeries(line.player.motion);
-        this.options.options.pipe(
-          map( opt => {
-            return opt.connection;
-          }))
-          .subscribe( o => this.inject =!o);
+        this.connects.subscribe(opt => this.inject = !opt);
         break;
       case Processes.connection.disconnect.ban:
         this.line.player.geo = this.log.parseGeoSeries(line.player.motion);
@@ -50,7 +66,15 @@ processes = Processes;
         this.line.player.geo = this.log.parseGeoSeries(line.player.motion);
         this.line.player.motion = this.parseBan(line.player.motion);
         break;
+      case Processes.connection.disconnect.time_out:
+        this.line.player.geo = this.log.parseGeoSeries(line.player.motion);
+        this.connects.subscribe(opt => this.inject = !opt);
+        break;
       case Processes.auth.ok:
+        break;
+      case Processes.auth.first_spawn.deny:
+        break;
+      case Processes.auth.first_spawn.allow:
         break;
       case Processes.mute.on.hand:
         this.parseHex(line.player.motion);
@@ -78,18 +102,12 @@ processes = Processes;
       case Processes.player_info.on.id:
         break;
       case Processes.free_for_all.spawn:
-      this.options.options.pipe(
-        map( opt => {
-          return opt.spawn;
-        }))
-        .subscribe( o => this.inject =!o);
+      // console.log('ffa_spawn injected')
+      line.player.motion = 'spawned';
+      this.spawn.subscribe(opt => this.inject = !opt);
         break;
-      case Processes.cmd.pre_process: // оставшийся препроцессы
-      this.options.options.pipe(
-        map( opt => {
-          return opt.preprocs;
-        }))
-        .subscribe( o => this.inject =!o);
+      case Processes.cmd.pre_process: // препроцессы
+      this.preprocs.subscribe(opt => this.inject = !opt);
       this.parseCmd(line.player.motion);
         break;
       case Processes.cmd.ok:
@@ -105,11 +123,7 @@ processes = Processes;
           this.parseCmd(line.player.motion);
         break;
       case Processes.weapons.buy:
-      this.options.options.pipe(
-        map( opt => {
-          return opt.weapBuy;
-        }))
-        .subscribe( o => this.inject =!o);
+      this.weaps.subscribe(opt => this.inject = !opt);
         break;
       case Processes.acheat.block.weapon.id:
         this.parseHex(line.player.motion);
@@ -122,34 +136,18 @@ processes = Processes;
       case Processes.sleep.leave.game:
         break;
       case Processes.health.killed:
-      this.options.options.pipe(
-        map( opt => {
-          return opt.killDeath;
-        }))
-        .subscribe( o => this.inject =!o);
+      this.deaths.subscribe(opt => this.inject = !opt);
         break;
       case Processes.health.suicided:
-      this.options.options.pipe(
-        map( opt => {
-          return opt.killDeath;
-        }))
-        .subscribe( o => this.inject =!o);
+      this.deaths.subscribe(opt => this.inject = !opt);
         break;
       case Processes.player_color.init:
           this.parseHex(line.player.motion);
-          this.options.options.pipe(
-            map( opt => {
-              return opt.colChange;
-            }))
-            .subscribe( o => this.inject =!o);
+          this.col_change.subscribe(opt => this.inject = !opt);
         break;
       case Processes.player_color.set:
           this.parseHex(line.player.motion);
-          this.options.options.pipe(
-            map( opt => {
-              return opt.colChange;
-            }))
-            .subscribe( o => this.inject =!o);
+          this.col_change.subscribe(opt => this.inject = !opt);
         break;
       case Processes.chat.msg:
         break;
@@ -166,6 +164,9 @@ processes = Processes;
         this.parsePmMsg(line.player.motion);
         break;
       case Processes.chat.report:
+        this.parsePmMsg(line.player.motion);
+        break;
+      case Processes.chat.block.broadcast.advertising:
         this.parsePmMsg(line.player.motion);
         break;
       case Processes.automute.dictionary.mute:

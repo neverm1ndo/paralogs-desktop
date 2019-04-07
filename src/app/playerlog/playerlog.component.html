@@ -1,120 +1,116 @@
-<div class="col-12 logswitch" *ngIf="mod=='player'">
-  <div class="row mt-2">
-    <div class="card text-white bg-dark mb-3 col-12">
-      <div class="card-header">
-        <div class="row">
-          <!-- <div class="col-3">
-            <div class="row">
-              <p>
-                <span>Добавлено <span [ngClass]="{'text-warning' : player.split('&').length> 3}">{{player.split('&').length}}</span> из 3</span>
-              </p>
-            </div>
-            <div class="row">
-                <h5 class="w-100" *ngFor="let nick of player.split('&'); let i = index" [ngClass]="{'shrinked' : player.split('&').length>= 3}">{{nick}} <span class="text-warning" *ngIf="i>2">не будет отображено</span></h5>
-            </div>
-          </div> -->
-            <div class="col-12 pr-0">
-              <button type="button" routerLink="/adm:" class="btn ml-2 btn-outline-light logswitch float-right">Лог входов в админ панель</button>
-              <button type="button" routerLink="/full:" class="btn btn-outline-light logswitch float-right">Показать полный лог</button>
-              <button type="button" routerLink="/acheat:" class="btn mr-2 btn-outline-light logswitch float-right">Лог срабатываний античита</button>
-            </div>
+<div *ngIf="(log.progress | async)==0; else loader">
+  <div class="col-12 overflow-auto" [ngStyle]="{'height': (innerHeight - 50) + 'px'}" *ngIf="loglist && mod=='player'">
+    <app-logline *ngFor="let line of (loglist | sort:player) ; let i = index" [line]="line"></app-logline>
+    <h6 *ngIf="((loglist | sort:player).length==0 && mod=='player') || ((loglist | hd:hdseries).length==0 && mod=='hd') || ((loglist | hd:hdseries).length==0 && mod=='sm')" class="font-weight-light text-center text-secondary mt-2 nofound" [ngStyle]="{'top': ((innerHeight - 150)/2) + 'px'}" role="alert">
+      Совпадений не найдено
+    </h6>
+  </div>
+
+  <div class="col-12 mt-3 mb-2" *ngIf="loglist && mod=='acheat'">
+    <p>
+      <fa name="microchip" class="mr-2"></fa>Лог процесса {{preproc}}
+      <br>
+      <kbd>Срабатывания {{preproc}}</kbd>
+    </p>
+    <app-logline *ngFor="let line of (loglist | preproc:preproc) ; let i = index" [line]="line"></app-logline>
+    <h6 *ngIf="((loglist | preproc:preproc).length==0)" class="font-weight-light text-center mt-2 nofound" [ngStyle]="{'top': ((innerHeight - 250)/2) + 'px'}" role="alert">
+      Лог {{preproc}} пуст
+    </h6>
+  </div>
+
+  <div class="col-12 pt-0 pl-0" *ngIf="loglist && mod=='adm'">
+    <div class="row">
+      <div class="col-12 border-bottom restructure2">
+        <fa name="user-secret" class="mr-3"></fa><h6><small>Лог входов в админ панель</small></h6>
+      </div>
+      <div class="overflow-auto w-100" [ngStyle]="{'height': (innerHeight - 97) + 'px'}">
+        <table class="table fulllog">
+          <tbody *ngFor="let line of (loglist | preproc:preproc); let i = index; let l = count">
+            <tr *ngIf="line.process=='<auth/ok>' || line.process=='<auth/error/password>'">
+              <th style="min-width:130px;" scope="row">{{line.date| date:'d MMM yy, HH:mm'}}</th>
+              <td style="max-width:180px;" routerLink="/{{line.player.nickname}}"><u class="text-primary">{{line.player.nickname}}</u></td>
+              <td style="max-width:180px;">
+                <span *ngIf="line.process=='<auth/ok>'" class="text-success">Успешно залогинен</span>
+                <span *ngIf="line.process=='<auth/error/password>'" class="text-danger">Неудачная попытка входа</span>
+              </td>
+              <td><kbd>{{line.player.motion.split(' ')[1] | adms}}</kbd> {{line.player.motion}}</td>
+            </tr>
+          </tbody>
+        </table>
         </div>
+    </div>
+  </div>
+
+  <div class="pr-0" *ngIf="loglist && mod=='full'">
+    <div class="">
+      <div class="d-flex border-bottom restructure overflow-hidden flex-wrap justify-content-between">
+        <nav class="mt-2">
+          <ul *ngIf="pager.pages && pager.pages.length" class="pagination pagination-sm float-left">
+            <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+              <a class="page-link" (click)="setPage(1)">Начало</a>
+            </li>
+            <li class="page-item" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+              <a class="page-link" (click)="setPage(page)">{{page}}</a>
+            </li>
+            <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+              <a class="page-link" (click)="setPage(pager.totalPages)">Конец</a>
+            </li>
+          </ul>
+          <kbd class="ml-3 float-right"><small>Всего в логе: {{loglist.length | number:'1.0-0'}} записей</small></kbd>
+        </nav>
+        <nav class="mt-2 mr-3">
+          <ul class="pagination pagination-sm">
+            <li class="page-item" [ngClass]="{active: full_viewmode=='full'}">
+              <a class="page-link" (click)="setView('full')"><fa name="columns"></fa></a>
+            </li>
+            <li class="page-item" [ngClass]="{active: full_viewmode=='simple'}">
+              <a class="page-link" (click)="setView('simple')"><fa name="table"></fa></a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="overflow-auto tabfull" [ngStyle]="{'height': (innerHeight - 98) + 'px'}">
+        <table *ngIf="full_viewmode=='simple'; else fullview" class="table fulllog table-sm">
+          <tbody>
+            <tr *ngFor="let line of pagedItems; let i = index; let l = count">
+              <th style="min-width:130px;" scope="row">{{line.date| date:'d MMM yy, HH:mm'}}</th>
+              <td style="max-width:220px;">{{line.process}}</td>
+              <td style="max-width:180px;" routerLink="/{{line.player.nickname}}"><u class="text-primary">{{line.player.nickname}}</u></td>
+              <td>{{line.player.motion}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <ng-template #fullview>
+          <div class="col-12 pl-0" *ngFor="let line of pagedItems ; let i = index">
+            <app-logline [line]="line"></app-logline>
+          </div>
+        </ng-template>
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-2">
-      <h6>Дата</h6>
-    </div>
-    <div class="col-2">
-      <h6>Процесс</h6>
-    </div>
-    <div class="col-2 text-center">
-      <h6>Ник</h6>
-    </div>
-    <div class="col-6 text-center">
-      <h6>Действие</h6>
+  <div *ngIf="!loglist" class="alert alert-danger mt-3 mr-3" role="alert">
+    <span><fa name="exclamation-triangle" class="mr-2"></fa><strong>Лог не загружен:</strong> Проверьте статус загрузки лога</span>
+  </div>
+  <app-hdsearch *ngIf="loglist && (mod=='hd' || mod=='sm')" [list]="loglist" [hd]="hdseries" [mode]="mod"></app-hdsearch>
+</div>
+<ng-template #loader>
+  <div class="col-12 loader">
+    <div class="loader_centrate text-center">
+      <svg class="loader_logo" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+      	 viewBox="0 0 64 64" style="enable-background:new 0 0 64 64;" xml:space="preserve">
+        <g>
+        	<path d="M13.4,53.5H3.6l9.9-7.8l-0.1-27.9l-9.8-7.3h9.8h13.9c5.3,0,8.7,0.2,10.3,0.6c2.5,0.6,4.5,2,6.2,4.2
+        		c1.7,2.2,2.5,4.9,2.5,8.4c0,2.6-0.5,4.9-1.4,6.7c-1,1.8-2.2,3.2-3.7,4.2c-1.5,1-3,1.7-4.5,2c-2.1,0.4-5.1,0.6-9,0.6h-3.6v16.2H13.4
+        		z M24.1,17.8V30h2.7c3.4,0,5.7-0.2,6.9-0.7c1.2-0.4,2.1-1.2,2.7-2.1c0.7-1,1-2.1,1-3.3c0-1.6-0.5-2.9-1.4-3.9
+        		c-0.9-1-2.1-1.7-3.5-1.9c-1-0.2-3.1-0.3-6.2-0.3H24.1z"/>
+        </g>
+        <g>
+        	<path d="M29.5,53.5l9.9-7.8H49V10.5h10.6v43H29.5z"/>
+        </g>
+      </svg>
+      <svg class="spinner" viewBox="25 25 50 50">
+        <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+      </svg><br>
     </div>
   </div>
-</div>
-<div class="col-12 mt-2 mb-2 overflow-hidden" *ngIf="loglist && mod=='player'">
-  <!--
-  Снизу костыль, кто осмелится исправить, тот молодец FIXME: [previous]="loglist[i?i-1:0]
-  UPD: я сделал еще хуже, это работает еще дольше, но работает... Вы только гляньте на этого монстра FIXME: [previous]="(loglist| sort:player)[i?i-1:0]
-  // UPD FIXME: использовать пайп для сортировки и фильтраии очень ресурсоемко и занимает больше секунды времени, нужна альтернатива
--->
-
-  <app-logline *ngFor="let line of (loglist | sort:player) ; let i = index" [line]="line"></app-logline>
-  <h4 *ngIf="((loglist | sort:player).length==0 && mod=='player') || ((loglist | hd:hdseries).length==0 && mod=='hd') || ((loglist | hd:hdseries).length==0 && mod=='sm')" class="font-weight-light text-center mt-2" role="alert">
-    Совпадений не найдено
-  </h4>
-</div>
-<div class="col-12 mt-3 mb-2 overflow-hidden" *ngIf="loglist && mod=='acheat'">
-  <h3>Лог процесса {{preproc}}</h3>
-  <p>
-    <br>
-    <kbd>Срабатывания {{preproc}}</kbd>
-  </p>
-  <app-logline *ngFor="let line of (loglist | preproc:preproc) ; let i = index" [line]="line"></app-logline>
-    <h4 *ngIf="((loglist | preproc:preproc).length==0)" class="font-weight-light text-center mt-2" role="alert">
-      Лог {{preproc}} пуст
-    </h4>
-</div>
-<div class="col-12 mt-3 mb-2 overflow-hidden" *ngIf="loglist && mod=='adm'">
-  <p>
-    Лог входов в админ панель
-  </p>
-  <table class="table fulllog">
-    <thead>
-      <tr>
-        <th scope="col">Дата</th>
-        <th scope="col">Ник</th>
-        <th scope="col">Статус</th>
-        <th scope="col">ID администратора</th>
-      </tr>
-    </thead>
-    <tbody *ngFor="let line of (loglist | preproc:preproc); let i = index; let l = count">
-      <tr *ngIf="line.process=='<auth/ok>' || line.process=='<auth/error/password>'">
-        <th style="min-width:130px;" scope="row">{{line.date| date:'d MMM yy, HH:mm'}}</th>
-        <td style="max-width:180px;" routerLink="/{{line.player.nickname}}"><u class="text-primary">{{line.player.nickname}}</u></td>
-        <td style="max-width:180px;">
-          <span *ngIf="line.process=='<auth/ok>'" class="text-success">Успешно залогинен</span>
-          <span *ngIf="line.process=='<auth/error/password>'" class="text-danger">Неудачная попытка входа</span>
-        </td>
-        <td><kbd>{{line.player.motion.split(' ')[1] | adms}}</kbd> {{line.player.motion}}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<div class="col-12 d-flex flex-column h-100 pr-0" *ngIf="loglist && mod=='full'">
-    <nav class="mt-2">
-      <ul *ngIf="pager.pages && pager.pages.length" class="pagination pagination-sm">
-        <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
-          <a class="page-link" (click)="setPage(1)">Начало</a>
-        </li>
-        <li class="page-item" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
-          <a class="page-link" (click)="setPage(page)">{{page}}</a>
-        </li>
-        <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-          <a class="page-link" (click)="setPage(pager.totalPages)">Конец</a>
-        </li>
-      </ul>
-    </nav>
-    <!-- <span class="badge badge-dark float-right">Лог содержит {{loglist.length}} строк</span> -->
-    <div class="overflow-auto d-flex tabfull">
-      <table class="table fulllog table-sm">
-        <tbody>
-          <tr *ngFor="let line of pagedItems; let i = index; let l = count">
-            <th style="min-width:130px;" scope="row">{{line.date| date:'d MMM yy, HH:mm'}}</th>
-            <td style="max-width:180px;">{{line.process}}</td>
-            <td style="max-width:180px;" routerLink="/{{line.player.nickname}}"><u class="text-primary">{{line.player.nickname}}</u></td>
-            <td>{{line.player.motion}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-</div>
-<div *ngIf="!loglist" class="alert alert-danger mt-3" role="alert">
-  <span><strong>Лог не загружен:</strong> Проверьте статус загрузки лога</span>
-</div>
-<app-hdsearch *ngIf="loglist && (mod=='hd' || mod=='sm')" [list]="loglist" [hd]="hdseries" [mode]="mod"></app-hdsearch>
+</ng-template>

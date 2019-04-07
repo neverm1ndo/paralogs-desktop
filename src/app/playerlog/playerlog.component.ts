@@ -17,16 +17,19 @@ export class PlayerlogComponent implements OnInit {
   hdseries: string;
   preproc: string;
   mod: string;
+  full_viewmode: string;
 
   pager: any = {};
 
   pagedItems: any[];
 
   constructor(
-    private log : LogService,
+    public log : LogService,
     private route: ActivatedRoute,
     public pagination: PaginationService
   ) { }
+
+  public innerHeight: any;
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
@@ -45,6 +48,10 @@ export class PlayerlogComponent implements OnInit {
       };
     };
   }
+  @HostListener('window:resize', ['$event'])
+    onResize() {
+      this.innerHeight = window.innerHeight;
+    }
 
   logToCollection(log: string) {
     let logObj = new Object;
@@ -100,7 +107,15 @@ export class PlayerlogComponent implements OnInit {
     this.pagedItems = this.loglist.slice(this.pager.startIndex, this.pager.endIndex + 1);
   }
 
+  setView(view: string) {
+    this.full_viewmode = view;
+    window.localStorage.setItem('view', view);
+  }
+
   ngOnInit() {
+    this.innerHeight = window.innerHeight;
+    this.full_viewmode = window.localStorage.getItem('view');
+    console.log(innerWidth);
     this.route.params
     .subscribe(params => {
       this.parseSearch(params);

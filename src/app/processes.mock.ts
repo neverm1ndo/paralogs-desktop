@@ -17,12 +17,14 @@ export class Processes {
         quit: '<connection/disconnect/quit>',
         ban: '<connection/disconnect/ban>',
         kick: '<connection/disconnect/kick>',
-        rconkickban: '<connection/disconnect/rconkickban>'
+        rconkickban: '<connection/disconnect/rconkickban>',
+        time_out: '<connection/disconnect/time_out>'
       }
     };
   static auth: any = {
     first_spawn: {
-      allow: '<auth/first_spawn/allow>'
+      allow: '<auth/first_spawn/allow>',
+      deny: '<auth/first_spawn/deny>'
     },
     ok: '<auth/ok>'
   };
@@ -84,7 +86,12 @@ export class Processes {
     group: '<chat/group>',
     admin_chat: '<chat/admin_chat>',
     report: '<chat/report>',
-    close: '<chat/close>'
+    close: '<chat/close>',
+    block: {
+      broadcast: {
+        advertising: '<chat/block/broadcast/advertising>'
+      }
+    }
   };
   static health: any = {
     killed: '<health/killed>',
