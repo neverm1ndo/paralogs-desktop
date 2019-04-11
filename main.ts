@@ -1,4 +1,5 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, autoUpdater, dialog } from 'electron';
+import {  } from "electron";
 import * as path from 'path';
 import * as url from 'url';
 import * as winStateKeeper from 'electron-window-state'
@@ -7,6 +8,24 @@ let win: any, serve: any;
 let splash: any;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
+
+autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Перезапустить', 'Позже'],
+    title: 'Обновление Paralogs',
+    message: process.platform === 'win32' ? releaseNotes : releaseName,
+    detail: 'Новая версия'+ releaseName +' Paralogs загружена и готова к установке.'
+  }
+
+  dialog.showMessageBox(dialogOpts, (response) => {
+    if (response === 0) autoUpdater.quitAndInstall()
+  })
+});
+autoUpdater.on('error', message => {
+  console.error('ОШИБКА: Paralogs не смог обновиться')
+  console.error(message)
+})
 
 
 function splashWindow() {
