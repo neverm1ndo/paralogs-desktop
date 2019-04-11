@@ -102,6 +102,9 @@ function createWindow() {
     win = null;
     app.quit();
   });
+  setInterval(() => {
+    autoUpdater.checkForUpdates()
+  }, 60000)
 }
 
 try {
