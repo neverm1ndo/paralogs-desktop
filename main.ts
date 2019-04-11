@@ -1,4 +1,4 @@
-import { app, BrowserWindow, autoUpdater, dialog } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import {  } from "electron";
 import * as path from 'path';
 import * as url from 'url';
@@ -8,25 +8,6 @@ let win: any, serve: any;
 let splash: any;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
-
-autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
-  const dialogOpts = {
-    type: 'info',
-    buttons: ['Перезапустить', 'Позже'],
-    title: 'Обновление Paralogs',
-    message: process.platform === 'win32' ? releaseNotes : releaseName,
-    detail: 'Новая версия'+ releaseName +' Paralogs загружена и готова к установке.'
-  }
-
-  dialog.showMessageBox(dialogOpts, (response) => {
-    if (response === 0) autoUpdater.quitAndInstall()
-  })
-});
-autoUpdater.on('error', message => {
-  console.error('ОШИБКА: Paralogs не смог обновиться')
-  console.error(message)
-})
-
 
 function splashWindow() {
   splash = new BrowserWindow({
@@ -85,7 +66,7 @@ function createWindow() {
       electron: require(`${__dirname}/node_modules/electron`)
     });
     win.loadURL('http://localhost:4200');
-    win.setMenu(null);
+    // win.setMenu(null);
   } else {
     win.loadURL(url.format({
       pathname: path.join(__dirname, 'dist/index.html'),
@@ -94,17 +75,10 @@ function createWindow() {
     }));
   }
 
-  // if (serve) {
-  //   win.webContents.openDevTools();
-  // }
-
   win.on('closed', () => {
     win = null;
     app.quit();
   });
-  setInterval(() => {
-    autoUpdater.checkForUpdates()
-  }, 60000)
 }
 
 try {
@@ -121,7 +95,6 @@ try {
   app.on('activate', () => {
     if (win === null) {
       createWindow();
-      // splashWindow();
     }
   });
 
