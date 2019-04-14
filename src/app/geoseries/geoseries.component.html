@@ -2,45 +2,45 @@
   <tbody>
     <tr>
       <th scope="row">IP</th>
-      <td>{{geoseries[1]}}</td>
+      <td>{{geoseries.ip}}</td>
     </tr>
     <tr>
-      <td><strong>Серийный номер AS :</strong> {{geoseries[2]}}</td>
+      <td><strong>Серийный номер AS :</strong> {{geoseries.as}}</td>
       <td>
-        <strong>Серийный номер SS :</strong> {{geoseries[6]}}
+        <strong>Серийный номер SS :</strong> {{geoseries.ss}}
       </td>
     </tr>
-    <tr>
+    <tr *ngIf="geoseries.hd">
       <th scope="row">HD</th>
-      <td><a routerLink="/hd:{{geoseries[8]}}">{{geoseries[8]}}</a></td>
+      <td><a routerLink="/hd:{{geoseries.hd}}">{{geoseries.hd}}</a></td>
     </tr>
-    <tr>
+    <tr *ngIf="geoseries.sm">
       <th scope="row">SM</th>
-      <td><a routerLink="/sm:{{geoseries[9]}}">{{geoseries[9]}}</a></td>
+      <td><a routerLink="/sm:{{geoseries.sm}}">{{geoseries.sm}}</a></td>
     </tr>
     <tr>
       <th scope="row">Язык</th>
-      <td>{{geoseries[3]}}</td>
+      <td>{{geoseries.cc}}</td>
     </tr>
     <tr>
       <th scope="row">Город</th>
-      <td>{{geoseries[4]}}</td>
+      <td>{{geoseries.city}}</td>
     </tr>
     <tr>
       <th scope="row">Провайдер</th>
-      <td>{{geoseries[5]}}</td>
+      <td>{{geoseries.org}}</td>
     </tr>
-    <tr>
+    <tr *ngIf="geoseries.s">
       <th scope="row">Разрешение экрана</th>
-      <td>{{geoseries[17]}}</td>
+      <td>{{geoseries.s}}</td>
     </tr>
     <tr>
       <th scope="row">Группа</th>
-      <td>{{geoseries[18]}}</td>
+      <td>{{geoseries.g}}</td>
     </tr>
     <tr>
       <th scope="row">Версия клиента</th>
-      <td>{{geoseries[19]}}</td>
+      <td>{{geoseries.c}}</td>
     </tr>
   </tbody>
 </table>

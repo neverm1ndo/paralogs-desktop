@@ -23,6 +23,7 @@ import { HdsearchComponent } from './hdsearch/hdsearch.component';
 import { PreprocPipe } from './preproc.pipe';
 import { AdmsPipe } from './adms.pipe';
 import { SpecialComponent } from './special/special.component';
+import { FileSizePipe } from './file-size.pipe';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { SpecialComponent } from './special/special.component';
     HdsearchComponent,
     PreprocPipe,
     AdmsPipe,
-    SpecialComponent
+    SpecialComponent,
+    FileSizePipe
   ],
   imports: [
     BrowserModule,

@@ -7,7 +7,7 @@ export class PaginationService {
 
   constructor() { }
 
-  getPager(totalItems: number, currentPage: number = 1, pageSize: number = 1000) {
+  getPager(totalItems: number, currentPage: number = 1, pageSize: number = 800) {
         let totalPages = Math.ceil(totalItems / pageSize);
 
         if (currentPage < 1) {

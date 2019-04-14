@@ -11,7 +11,7 @@ import { LogService } from '../log.service';
 })
 export class HeadsearchComponent implements OnInit {
 
-  title = 'PARALOGS';
+  title = 'Paralogs';
   currentNickname = new FormControl('');
   error: string;
 
@@ -25,12 +25,12 @@ export class HeadsearchComponent implements OnInit {
       this.router.navigate(['/'+nickname]);
     } else {
       this.error = "Слишком короткое значение. Минимум 3 символа."
-      setTimeout((t:any) => this.error=null, 3000);
+      setTimeout(() => this.error=null, 3000);
     }
   }
 
   read(e: any) {
-    this.log.fileReadMultiple(e);
+    this.log.multiFileRead(e);
   }
 
   ngOnInit() {

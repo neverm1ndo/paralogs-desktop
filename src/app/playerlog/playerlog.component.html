@@ -5,7 +5,6 @@
       Совпадений не найдено
     </h6>
   </div>
-
   <div class="col-12 mt-3 mb-2" *ngIf="loglist && mod=='acheat'">
     <p>
       <fa name="microchip" class="mr-2"></fa>Лог процесса {{preproc}}
@@ -17,7 +16,6 @@
       Лог {{preproc}} пуст
     </h6>
   </div>
-
   <div class="col-12 pt-0 pl-0" *ngIf="loglist && mod=='adm'">
     <div class="row">
       <div class="col-12 border-bottom restructure2">
@@ -40,7 +38,6 @@
         </div>
     </div>
   </div>
-
   <div class="pr-0" *ngIf="loglist && mod=='full'">
     <div class="">
       <div class="d-flex border-bottom restructure overflow-hidden flex-wrap justify-content-between">
@@ -69,7 +66,7 @@
           </ul>
         </nav>
       </div>
-      <div class="overflow-auto tabfull" [ngStyle]="{'height': (innerHeight - 98) + 'px'}">
+      <div class="overflow-auto tabfull" [ngStyle]="{'height': (innerHeight - 96) + 'px'}">
         <table *ngIf="full_viewmode=='simple'; else fullview" class="table fulllog table-sm">
           <tbody>
             <tr *ngFor="let line of pagedItems; let i = index; let l = count">

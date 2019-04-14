@@ -8,6 +8,7 @@ export class AdmsPipe implements PipeTransform {
     55: 'dimonml',
     140: 'hidan',
     1559: 'MIASKO',
+    3067: 'Edelweiss',
     3119: 'Edelweiss',
     7510: 'Randy',
     9606: 'Гранит',

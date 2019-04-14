@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -11,93 +10,77 @@ export class LogService {
   constructor(
     public http: HttpClient
   ) { }
+
   currentTarget: string;
-  public file: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-  status: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  filesInfo: number;
+  public file: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  status: BehaviorSubject<any> = new BehaviorSubject<any>(false);
   progress: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   loglist: Array<any>;
-  buffer: string;
-
-  getLogFile(filename: string) {
-  return this.http.get(filename, {responseType: 'text'})
-    .pipe(
-      tap(
-        data => {console.log('Log ' + filename + ' sucessfuly parsed!\n' + 'Registered: lines ' + data.length)},
-        error => {console.error(error)}
-      )
-    );
+  loading: boolean = false;
+  info = {
+    size: 0,
+    length: 0
   }
-  fileReadMultiple(e: any) {
+
+  //Не знаю, вроде работает
+  async multiFileRead(e: any) {
+    let info = {
+      size: 0,
+      length: 0
+    };
     let files = [].slice.call(e.target.files);
-    let buffer: string = '';
-    // this.buffer = buffer;
-    for (let i = 0; i<files.length; i++) {
+    let stack = [];
+    info.length = files.length;
+    files.forEach(async (file: File) => {
       let reader = new FileReader();
-      reader.readAsText(files[i], 'cp1251');
-      reader.onload = () => {
-        buffer = buffer + reader.result;
-        this.file.next(buffer);
-        this.progress.next(0);
-        this.status.next(true);
+      info.size += file.size;
+        reader.onload = async() => {
+          await stack.push(reader.result.toString());
+
+          stack.sort((fileA: string, fileB: string) => fileA.slice(0, 12).localeCompare(fileB.slice(0, 12)));
+
+          this.progress.next(0);
+          this.status.next(true);
+          this.file.next(stack.join());
       }
       reader.onprogress = (e) => {
-        this.status.next(false);
         if (e.lengthComputable) {
           this.progress.next(Math.floor((e.loaded / e.total) * 100));
+          this.status.next(false);
         }
       }
-    }
-    this.filesInfo = files.length;
+      reader.readAsText(file, 'cp1251');
+    });
+    this.info = info;
   }
 
+//На случай если понадобится чтение только одного файла
   fileRead(e: any) {
-    // let files = [].slice.call(e.target.files);
     let file = e.target.files[0];
     let reader = new FileReader();
-    reader.readAsText(file, 'cp1251');
-    // this.fileInfo = file;
     this.status.next(false);
     reader.onprogress = (e) => {
-           if (e.lengthComputable) {
-            return this.progress.next(Math.floor((e.loaded / e.total) * 100));
-           }
+       if (e.lengthComputable) {
+         this.progress.next(Math.floor((e.loaded / e.total) * 100));
        }
+    }
     reader.onload = () => {
       this.status.next(true);
       this.progress.next(0);
-        return this.file.next(reader.result);
-      }
+      this.file.next(reader.result.toString());
+    }
+    reader.readAsText(file, 'cp1251');
   }
+
   parseGeoSeries(gs: string) {
+    let series: any = {};
     let parsed = gs.match(/\{(.*?)\}/g);
-    parsed = Object.assign({}, parsed);
-    let series = {
-            id: parsed[0],
-            ip: parsed[1],
-            as: parsed[2],
-            cc: parsed[3],
-            city: parsed[4],
-            org: parsed[5],
-            ss: parsed[6],
-            v: parsed[7],
-            hd: parsed[8],
-            sm: parsed[9],
-            di: parsed[10],
-            cp: parsed[11],
-            hw: parsed[12],
-            mg: parsed[13],
-            pi: parsed[14],
-            cn: parsed[15],
-            un: parsed[16],
-            s: parsed[27],
-            g: parsed[30],
-            c: parsed[31]
-          };
-          for (let key in series) {
-            series[key] = series[key].match(/[^\{\}':']+/g)[1];
-          };
-          return Object.values(series);
+      parsed.forEach((s: any) => {
+        let serial = s.match(/[^\{\}':']+/g)[0];
+        let ser_value = s.match(/[^\{\}':']+/g)[1]
+        series[serial] = ser_value;
+      });
+      return series;
   }
   findActionById(date: number, move: string) {
     let list = this.loglist;

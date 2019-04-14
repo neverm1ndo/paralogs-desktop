@@ -34,7 +34,7 @@
           <div class="mr-2">
             <span class="mt-3 mr-2">Статус:
               <kbd><i class="mr-1 led" [ngClass]="{'led-success': (log.status | async), 'led-warning': !(log.status | async)}"></i>{{(log.status | async)?'Загружено':'Не загружено'}}</kbd><br/>
-              <span *ngIf="log.filesInfo"><small>Файлов: {{log.filesInfo}}</small></span>
+              <span *ngIf="log.info.length!=0 && (log.status | async)"><small>Файлов: {{log.info.length}}, Размер: {{log.info.size | fileSize }}</small></span>
             </span>
           </div>
         </div>
